@@ -1,0 +1,8 @@
+<div ng-repeat="item in componente.dtoArquivos">
+	<div ng-class="componente.cssColuna">
+		<div class="form-group">
+			<label>{{ item.descricao }}</label>
+			<componente-upload uploader="item.componenteUpload"></componente-upload>
+		</div>
+	</div>
+</div>

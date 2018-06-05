@@ -1,0 +1,28 @@
+<div ng-show="componente.arquivos.length > 0" class="fade-in-out">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="tabela-upload">
+                <thead>
+                    <tr>
+                        <th style="width: 80%;">Nome do Arquivo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, item) in componente.arquivos" class="tabela-upload-linha" ng-hide="(item.removido && item.id && componente.envioMultiplo === false && componente.arquivos.length === 2)">
+                        <td>
+                            <strong>{{ item.nomeExibicao}}</strong>
+                        </td>
+                        <td class="text-center" ng-hide="item.removido">
+                            <button class="btn btn-primary btn-flat btn-xs" type="button" ng-click="componente.visualizar(key)"><i class="fa fa-eye"></i></button>
+                            <button class="btn btn-danger btn-flat btn-xs" type="button" mwl-confirm title="{{ vm.label.LB0215}}" message="{{ componente.mensagemRemover}}" confirm-text="{{ vm.label.LB0142}}" cancel-text="{{ vm.label.LB0143}}" on-confirm="componente.remover({{ key}})" confirm-button-type="danger btn-flat" cancel-button-type="default btn-flat"><i class="fa fa-trash"></i></button>
+                        </td>
+                        <td class="text-center" ng-show="item.removido">
+                            <button type="button" class="btn btn-primary btn-flat btn-xs" ng-click="componente.restaurarArquivo(key)" ><i class="fa fa-undo"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>	
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="input-group image-preview">
+    <span class="input-group-btn">
+        <div class="btn btn-primary image-preview-input btn-flat">
+            <span class="glyphicon glyphicon-folder-open"></span>
+            <span class="image-preview-input-title">Selecionar Arquivo</span>
+        	<input class="uploader" type="file" nv-file-select="" uploader="componente.uploader" multiple ng-if="componente.envioMultiplo" />
+        	<input class="uploader" type="file" nv-file-select="" uploader="componente.uploader" ng-if="!componente.envioMultiplo" />
+        </div>
+    </span>
+</div>
+
+<div ng-show="componente.barraProgresso != 0" >
+    <round-progress
+    	style="margin-top: 5px;"
+	    max="100"
+	    current="componente.barraProgresso"
+	    color="#3c8dbc"
+	    bgcolor="#fff"
+	    radius="20"
+	    semi="false"
+	    rounded="rounded"
+	    stroke="5"
+	    clockwise="clockwise"
+	    responsive="responsive"
+	    duration="800"
+	    animation="easeOutCubic"
+	    offset="5"
+	    animation-delay="0"
+	    on-render="showPreciseCurrent">
+	</round-progress>
+</div>
+
+<componente-upload-preview></componente-upload-preview>
