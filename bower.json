@@ -1,0 +1,22 @@
+{
+  "name": "angular-upload",
+  "homepage": "https://github.com/kelvinpalves/angular-upload",
+  "authors": [
+    "Kelvin Alves <kelvinpalves@gmail.com>"
+  ],
+  "description": "Componente de Upload em AngularJS",
+  "main": "dist/kopp-upload.min.js",
+  "keywords": [
+    "upload",
+    "angularJS",
+    "kopp"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
