@@ -5,7 +5,7 @@
     "Kelvin Alves <kelvinpalves@gmail.com>"
   ],
   "description": "Componente de Upload em AngularJS",
-  "main": "dist/kopp-upload.min.js",
+  "main": "dist/kopp-upload.js",
   "keywords": [
     "upload",
     "angularJS",
@@ -18,5 +18,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "angular-svg-round-progressbar": "0.4.8",
+    "angular-file-upload": "^2.5.0"
+  }
 }

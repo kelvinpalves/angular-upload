@@ -2,15 +2,15 @@
 	'use strict';
 
 	angular
-		.module('componentes.upload')
-		.directive('componenteUpload', componenteUpload);
+		.module('kopp.upload')
+		.directive('uploadGenerator', uploadGenerator);
 
-	componenteUpload.$inject = ['$compile', '$q']
+	uploadGenerator.$inject = ['$compile', '$q']
 
-	function componenteUpload($compile, $q) {
+	function uploadGenerator($compile, $q) {
 		var directive = {
 			restrict: 'E',
-			templateUrl: 'src/app/componentes/upload/upload.html',
+			templateUrl: 'src/upload-generator.html',
 			link: link,
 			scope: true
 		};

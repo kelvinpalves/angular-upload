@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('componentes.upload')
+		.module('kopp.upload')
 		.factory('UploadGenerator', UploadGenerator);
 
 	UploadGenerator.$inject = ['arquivoUtils', 'Upload', '$q', 'controller']

@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-            .module('componentes.upload')
+            .module('kopp.upload')
             .factory('Upload', Upload);
 
     Upload.$inject = ['FileUploader', 'configuracaoREST', 'controller', 'Lightbox', '$q', '$window'];
