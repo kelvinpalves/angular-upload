@@ -21,6 +21,12 @@
   ],
   "dependencies": {
     "angular-svg-round-progressbar": "0.4.8",
-    "angular-file-upload": "^2.5.0"
+    "angular-file-upload": "^2.5.0",
+    "bootstrap": "3.3",
+    "angular-bootstrap-lightbox": "^0.12.0",
+    "angular-bootstrap-confirm": "^2.5.1",
+    "font-awesome": "^5.0.13",
+    "angular-bootstrap": "^2.5.0",
+    "angular-sanitize": "^1.7.0"
   }
 }

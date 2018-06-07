@@ -4,11 +4,42 @@
 
     angular
             .module('kopp.upload')
-            .factory('Upload', Upload);
+            .factory('Upload', Upload)
+            .provider('UploadConfig', UploadConfig);
 
-    Upload.$inject = ['FileUploader', 'configuracaoREST', 'controller', 'Lightbox', '$q', '$window'];
+    Upload.$inject       = ['FileUploader', 'UploadConfig', '$q', '$window'];
+    UploadConfig.$inject = ['uploadGlobal'];
 
-    function Upload(FileUploader, configuracaoREST, controller, Lightbox, $q, $window) {
+    function UploadConfig(uploadGlobal) {
+        var config = {
+            configREST: {
+                url: null,
+                arquivo: {
+                    base: null,
+                    download: null,
+                    preview: null
+                },
+                upload: null
+            },
+            label: uploadGlobal
+        };
+
+        var upload = this;
+        upload.setConfig = setConfig;
+        upload.$get = get;
+
+        function setConfig (input) {
+            if (angular.isDefined(input.configREST)) {
+                angular.merge(config.configREST, input.configREST);
+            }
+        }
+
+        function get() {
+            return config;
+        }
+    }
+
+    function Upload(FileUploader, config, $q, $window) {
 
         function ComponenteUpload(options) {
             var LIMITE_EXCEDIDO = 'queueLimit';
@@ -16,20 +47,23 @@
 
             var vm = this;
 
+            var configuracaoREST = config.configREST;
+
             vm.arquivos = [];
             vm.barraProgresso = 0;
             vm.envioMultiplo = false;
             vm.inicializar = inicializar;
             vm.ler = ler;
+            vm.label = config.label;
             vm.possuiArquivoUnico = false;
             vm.remover = remover;
             vm.restaurarArquivo = restaurarArquivo;
             vm.visualizar = visualizar;
 
             //Mensagens
-            var msg = controller.msg;
-            var msgAttr = controller.msgAttr;
-            vm.mensagemRemover = msgAttr(msg.MG002.msg);
+            var msg = {}; //Setar as mensagens.
+            var msgAttr = function(mensagens) {}; // Setar a função que seta as mensagens
+            // vm.mensagemRemover = msgAttr(msg.MG002.msg);
 
             iniciar(options);
 
@@ -86,9 +120,9 @@
             function erroAoAdcionarArquivo(item, filter, options) {
 
                 if (filter.name === MIME_TYPE_FILTER) {
-                    controller.feed(controller.messageType.ERROR, 'Tipo Inválido.');
+                    // controller.feed(controller.messageType.ERROR, 'Tipo Inválido.');
                 } else {
-                    controller.feed(msg.MG023);
+                    // controller.feed(msg.MG023);
                 }
 
             }
@@ -97,7 +131,7 @@
                 var deferred = $q.defer();
 
                 if (objeto.id) {
-                    deferred.resolve(configuracaoREST.url + configuracaoREST.arquivo + '/' + objeto.id + '/download');
+                    deferred.resolve(configuracaoREST.url + configuracaoREST.arquivo.base + '/' + objeto.id + '/' + configuracaoREST.arquivo.download);
                 } else {
                     deferred.reject();
                 }
@@ -109,7 +143,7 @@
                 var deferred = $q.defer();
 
                 if (objeto.id) {
-                    deferred.resolve(configuracaoREST.url + configuracaoREST.arquivo + '/' + objeto.id + '/view');
+                    deferred.resolve(configuracaoREST.url + configuracaoREST.arquivo.base + '/' + objeto.id + '/' + configuracaoREST.arquivo.preview);
                 } else {
                     var reader = new FileReader();
                     reader.readAsDataURL(objeto.fileItem._file);
@@ -127,7 +161,7 @@
                 var deferred = $q.defer();
 
                 if (objeto.id) {
-                    deferred.resolve(configuracaoREST.url + configuracaoREST.arquivo + '/' + objeto.id + '/view');
+                    deferred.resolve(configuracaoREST.url + configuracaoREST.arquivo.base + '/' + objeto.id + '/' + configuracaoREST.arquivo.preview);
                 } else {
                     deferred.reject();
                 }
@@ -144,6 +178,9 @@
             }
 
             function iniciar(options) {
+
+                console.log(UploadConfig.configREST);
+
                 vm.uploader = new FileUploader();
                 vm.uploader.onWhenAddingFileFailed = erroAoAdcionarArquivo;
                 vm.uploader.onSuccessItem = sucessoAoAdicionarItem;
@@ -213,7 +250,7 @@
                         }
                     }
                 } else {
-                    controller.feed(msg.MG023);
+                    // controller.feed(msg.MG023);
                 }
             }
 
@@ -244,11 +281,11 @@
                 }
 
                 function erroAoCarregarUrlParaDownload(response) {
-                    controller.feed(msg.MG024);
+                    // controller.feed(msg.MG024);
                 }
 
                 function erroAoCarregarUrlParaVisualizacao(response) {
-                    controller.feed(msg.MG025);
+                    // controller.feed(msg.MG025);
                 }
 
                 function efetuarDownloadOuVisualizacao(response) {
