@@ -14,7 +14,7 @@
 
         var config = {
             configREST: {
-                url: 'http://10.2.0.61:8081/sistrak-base-rest/rs/',
+                url: 'http://10.2.0.61:8081/retaguarda/rs/',
                 upload: 'core/file/upload',
                 arquivo: {
                     base: 'basico/arquivo/arquivo',

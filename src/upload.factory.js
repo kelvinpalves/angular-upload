@@ -7,39 +7,10 @@
             .factory('Upload', Upload)
             .provider('UploadConfig', UploadConfig);
 
-    Upload.$inject       = ['FileUploader', 'UploadConfig', '$q', '$window'];
+    Upload.$inject       = ['FileUploader', 'UploadConfig', '$q', '$window', 'Lightbox', 'mensagem', 'mensagemGlobal'];
     UploadConfig.$inject = ['uploadGlobal'];
 
-    function UploadConfig(uploadGlobal) {
-        var config = {
-            configREST: {
-                url: null,
-                arquivo: {
-                    base: null,
-                    download: null,
-                    preview: null
-                },
-                upload: null
-            },
-            label: uploadGlobal
-        };
-
-        var upload = this;
-        upload.setConfig = setConfig;
-        upload.$get = get;
-
-        function setConfig (input) {
-            if (angular.isDefined(input.configREST)) {
-                angular.merge(config.configREST, input.configREST);
-            }
-        }
-
-        function get() {
-            return config;
-        }
-    }
-
-    function Upload(FileUploader, config, $q, $window) {
+    function Upload(FileUploader, config, $q, $window, Lightbox, mensagem, mensagemGlobal) {
 
         function ComponenteUpload(options) {
             var LIMITE_EXCEDIDO = 'queueLimit';
@@ -49,21 +20,25 @@
 
             var configuracaoREST = config.configREST;
 
-            vm.arquivos = [];
-            vm.barraProgresso = 0;
-            vm.envioMultiplo = false;
-            vm.inicializar = inicializar;
-            vm.ler = ler;
-            vm.label = config.label;
+            vm.arquivos           = [];
+            vm.barraProgresso     = 0;
+            vm.envioMultiplo      = false;
+            vm.inicializar        = inicializar;
+            vm.ler                = ler;
+            vm.label              = config.label;
             vm.possuiArquivoUnico = false;
-            vm.remover = remover;
-            vm.restaurarArquivo = restaurarArquivo;
-            vm.visualizar = visualizar;
+            vm.remover            = remover;
+            vm.restaurarArquivo   = restaurarArquivo;
+            vm.visualizar         = visualizar;
 
-            //Mensagens
-            var msg = {}; //Setar as mensagens.
-            var msgAttr = function(mensagens) {}; // Setar a função que seta as mensagens
-            // vm.mensagemRemover = msgAttr(msg.MG002.msg);
+            var msg     = mensagemGlobal;
+            var msgAttr = mensagem.msgAttr;
+
+            var controller = {
+                feed: mensagem.feed,
+                feedMessage: mensagem.feedMessage,
+                messageType: mensagem.type
+            };
 
             iniciar(options);
 
@@ -118,13 +93,11 @@
             }
 
             function erroAoAdcionarArquivo(item, filter, options) {
-
                 if (filter.name === MIME_TYPE_FILTER) {
-                    // controller.feed(controller.messageType.ERROR, 'Tipo Inválido.');
+                    controller.feed(msg.MG001); // TODO: Ver algum dia.
                 } else {
-                    // controller.feed(msg.MG023);
+                    controller.feed(msg.MG001);
                 }
-
             }
 
             function gerarUrlDownload(objeto) {
@@ -178,14 +151,13 @@
             }
 
             function iniciar(options) {
-
-                console.log(UploadConfig.configREST);
-
                 vm.uploader = new FileUploader();
+
                 vm.uploader.onWhenAddingFileFailed = erroAoAdcionarArquivo;
-                vm.uploader.onSuccessItem = sucessoAoAdicionarItem;
-                vm.uploader.onProgressAll = atualizarProgresso;
-                vm.uploader.onCompleteAll = uploadFinalizado;
+                vm.uploader.onSuccessItem          = sucessoAoAdicionarItem;
+                vm.uploader.onProgressAll          = atualizarProgresso;
+                vm.uploader.onCompleteAll          = uploadFinalizado;
+                vm.uploader.onErrorItem            = uploadErro;
 
                 vm.uploader.autoUpload = true;
                 vm.uploader.url = configuracaoREST.url + configuracaoREST.upload;
@@ -250,8 +222,13 @@
                         }
                     }
                 } else {
-                    // controller.feed(msg.MG023);
+                    controller.feed(msg.MG001);
                 }
+            }
+
+            function uploadErro() {
+                vm.barraProgresso = 0;
+                controller.feed(msg.MG001);
             }
 
             function uploadFinalizado() {
@@ -281,11 +258,11 @@
                 }
 
                 function erroAoCarregarUrlParaDownload(response) {
-                    // controller.feed(msg.MG024);
+                    controller.feed(msg.MG002);
                 }
 
                 function erroAoCarregarUrlParaVisualizacao(response) {
-                    // controller.feed(msg.MG025);
+                    controller.feed(msg.MG003);
                 }
 
                 function efetuarDownloadOuVisualizacao(response) {
@@ -299,5 +276,38 @@
         }
 
         return ComponenteUpload;
+    }
+
+    function UploadConfig(uploadGlobal) {
+        var config = {
+            configREST: {
+                url: null,
+                arquivo: {
+                    base: null,
+                    download: null,
+                    preview: null
+                },
+                upload: null
+            },
+            label: uploadGlobal
+        };
+
+        var upload = this;
+        upload.setConfig = setConfig;
+        upload.$get      = get;
+
+        function setConfig (input) {
+            if (angular.isDefined(input.configREST)) {
+                angular.merge(config.configREST, input.configREST);
+            }
+
+            if (angular.isDefined(input.label)) {
+                config.label = input.label;
+            }
+        }
+
+        function get() {
+            return config;
+        }
     }
 })();

@@ -27,6 +27,7 @@
     "angular-bootstrap-confirm": "^2.5.1",
     "font-awesome": "^5.0.13",
     "angular-bootstrap": "^2.5.0",
-    "angular-sanitize": "^1.7.0"
+    "angular-sanitize": "^1.7.0",
+    "toastr": "^2.1.3"
   }
 }
